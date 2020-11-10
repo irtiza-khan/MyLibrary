@@ -1,0 +1,13 @@
+<% if(flashMessage){ %>
+    <% if(flashMessage.error){ %>
+        <p>
+            <%= flashMessage.error %>
+        </p>
+
+        <% } else if(flashMessage.success){ %>
+            <p>
+                <%= flashMessage.success %>
+            </p>
+            <% } %>
+
+                <% } %>
