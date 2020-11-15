@@ -5,6 +5,7 @@ const path = require('path')
 const morgan = require('morgan');
 const indexRouter = require('./routes/index')
 const authorRouter = require('./routes/author')
+const BookRouter = require('./routes/books')
 const connectDB = require('./config/db')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -48,5 +49,6 @@ app.set('view engine', 'ejs')
 
 app.use('/', indexRouter);
 app.use('/authors', authorRouter);
+app.use('/books', BookRouter);
 
 app.listen(PORT, () => console.log(`Port Listening on https://localhost:${PORT}`));
