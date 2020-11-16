@@ -5,19 +5,21 @@
         <div>
             <label>Title</label>
             <input type="text" name="title" value="<%= searchOptions.title %> ">
-            <button type="submit">Search</button>
         </div>
+        <br> <br>
 
         <div>
             <label>Publish After </label>
             <input type="date" name="publishAfter" value="<%= searchOptions.publishAfter %> ">
 
         </div>
+        <br> <br>
         <div>
             <label>Publish Before </label>
             <input type="date" name="publishBefore" value="<%= searchOptions.publishBefore %> ">
 
         </div>
+        <br> <br>
 
         <button type="submit">Search</button>
 
@@ -31,7 +33,11 @@
 
     <% books.forEach(book => { %>
         <div>
-            <img src="<%= book.coverImagePath %> " alt="" height="150" width="100">
+            <h3>
+                <%= book.title %>
+            </h3>
+            <img src="<%= book.coverImagePath %> " height="120" width="150">
+            <br><br>
 
         </div>
 

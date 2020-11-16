@@ -29,9 +29,22 @@ let upload = multer({
 
 //* All Books Route
 router.get('/', async(req, res) => {
-    console.log(req.query);
+    //console.log(req.query);
+    let query = Book.find();
+    //* ---ADDING FILTER TO SEARCHING FOR BOOKS
+    if (req.query.title != null && req.query.title != '') {
+        query = query.regex('title', new RegExp(req.query.title, 'i'))
+    }
+    if (req.query.publishBefore != null && req.query.publishBefore != '') {
+        query = query.lte('publishDate', req.query.publishBefore); //? Checking if publishDate is <= publish Before Data
+
+    }
+    if (req.query.publishAfter != null && req.query.publishAfter != '') {
+        query = query.gte('publishDate', req.query.publishAfter); //? Checking if publishDate is >= publish Before Data
+
+    }
     try {
-        const books = await Book.find({});
+        const books = await query.exec();
         res.render('books/index', {
             books,
             searchOptions: req.query
@@ -89,7 +102,7 @@ router.post('/', async(req, res) => {
         console.log(book);
         book.save()
             .then(result => {
-                req.flash('success', 'Book Added To The Database' + result);
+                req.flash('success', 'Book Added To The Database');
                 return res.redirect('/books');
 
             })
