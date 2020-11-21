@@ -11,6 +11,13 @@
     <div>
         <%= author.name %>
     </div>
+    <a href="/authors/<%= author.id%> ">View</a>
 
+    <a href="/authors/<%= author.id%>/edit ">Edit</a>
+
+    <!--Delete Request Form-->
+    <form action="/authors/<%= author.id %>?_method=DELETE " method="POST">
+        <button type="submit">Delete</button>
+    </form>
 
     <% }) %>

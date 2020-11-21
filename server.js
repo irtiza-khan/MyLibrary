@@ -10,6 +10,7 @@ const connectDB = require('./config/db')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash');
+const methodOverride = require('method-override')
 const session = require('express-session')
 require('dotenv').config()
 
@@ -39,6 +40,9 @@ app.use((req, res, next) => {
     res.locals.flashMessage = req.flash();
     next();
 })
+
+//? Method Override handles our POST / Delete Request 
+app.use(methodOverride('_method'))
 
 //Setting  Up view engine  
 app.use(expressLayouts)

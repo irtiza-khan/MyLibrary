@@ -1,11 +1,11 @@
 <% if(flashMessage){ %>
     <% if(flashMessage.error){ %>
-        <p>
+        <p style="color: red;">
             <%= flashMessage.error %>
         </p>
 
         <% } else if(flashMessage.success){ %>
-            <p>
+            <p style="color: green;">
                 <%= flashMessage.success %>
             </p>
             <% } %>

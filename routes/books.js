@@ -59,6 +59,7 @@ router.get('/new', async(req, res) => {
 //* Create A New Book Route
 router.post('/', async(req, res) => {
     //! Checking File Request
+    //TODO: Need to add Form validation
     console.log(req.body);
 
     const book = new Book({
@@ -92,18 +93,5 @@ router.post('/', async(req, res) => {
 
 
 
-
-
-
-function saveCover(book, coverEncoded) {
-    if (coverEncoded == null) return
-    const cover = JSON.parse(coverEncoded);
-    if (cover != null && imageMimeType.includes(cover.type)) {
-        book.coverImage = new Buffer.from(cover.data, 'base64');
-        book.coverImageType = cover.type;
-    }
-
-
-}
 
 module.exports = router;
