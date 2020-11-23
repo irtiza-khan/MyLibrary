@@ -9,7 +9,7 @@ const imageMimeType = ['images/jpeg', 'images/png', 'images/gif']
 
 //* All Books Route
 router.get('/', async(req, res) => {
-    //console.log(req.query);
+
     let query = Book.find();
     //* ---ADDING FILTER TO SEARCHING FOR BOOKS
     if (req.query.title != null && req.query.title != '') {
@@ -56,11 +56,99 @@ router.get('/new', async(req, res) => {
 })
 
 
+//Get All Books
+
+router.get('/:id', async(req, res) => {
+
+
+    try {
+        const book = await Book.findById(req.params.id).populate('author'); //populate reference to author collections
+        res.render('books/show', { book })
+    } catch (err) {
+        res.redirect('/');
+
+    }
+})
+
+// Edit Book 
+router.get('/:id/edit', async(req, res) => {
+
+    try {
+        const book = await Book.findById(req.params.id);
+        const authors = await Author.find();
+        res.render('books/edit', { book, authors });
+
+
+    } catch (err) {
+        req.flash('error', 'Book Did not find');
+        return res.redirect('/');
+
+    }
+})
+
+
+//Update a Book
+router.put('/:id', async(req, res) => {
+    let book;
+    let authors;
+    try {
+        authors = await Author.find();
+        book = await Book.findById(req.params.id);
+        book.title = req.body.title;
+        book.author = req.body.author;
+        book.publishDate = new Date(req.body.publishDate);
+        book.pageCount = req.body.pageCount
+        book.description = req.body.description
+        if (req.body.cover != null && req.body.cover !== '') {
+            savCover(book, req.body.cover);
+        }
+        await book.save();
+        req.flash('sucess', 'Book Updated Successfully');
+        return res.redirect(`/books/${book.id}`)
+
+    } catch (err) {
+        if (book != null) {
+            res.render('books/edit', {
+                book,
+                authors
+            })
+        } else {
+
+            return res.redirect('/');
+        }
+
+    }
+
+})
+
+//Delete a book
+router.delete('/:id', async(req, res) => {
+    let book
+    try {
+        book = await Book.findById(req.params.id);
+        await book.remove();
+        return res.redirect('/books');
+    } catch (err) {
+        if (book != null) {
+            req.flash('error', 'Could Not Remove Book ');
+            return res.render('books/show', {
+                book
+            })
+        } else {
+            res.redirect('/books');
+
+        }
+
+
+    }
+})
+
+
 //* Create A New Book Route
 router.post('/', async(req, res) => {
     //! Checking File Request
     //TODO: Need to add Form validation
-    console.log(req.body);
+
 
     const book = new Book({
             title: req.body.title,
@@ -78,9 +166,8 @@ router.post('/', async(req, res) => {
 
     try {
         const books = await book.save();
-        console.log(books);
         req.flash('success', 'Book Added To The Database');
-        return res.redirect('/books');
+        return res.redirect(`/books/${books.id}`);
 
 
     } catch (err) {
@@ -92,6 +179,15 @@ router.post('/', async(req, res) => {
 })
 
 
+
+
+function savCover(book, cover) {
+    let imageCover = JSON.parse(cover);
+    if (imageCover != null && imageCover !== '') {
+        book.coverImage = new Buffer.from(imageCover.data, 'base64');
+        book.coverImageType = imageCover.type;
+    }
+}
 
 
 module.exports = router;

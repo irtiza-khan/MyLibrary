@@ -22,7 +22,12 @@ connectDB();
 
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }))
+//app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({ limit: '150mb' }));
+app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
+    limit: '150mb',
+    extended: true
+}));
 
 
 app.use(cookieParser(process.env.SECRET_KEY));
